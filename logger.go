@@ -1,4 +1,4 @@
-package simulator
+package logger
 
 import (
 	"fmt"
@@ -44,19 +44,19 @@ func (l *Logger) Log(level int, args ...interface{}) {
 			prefix = "\033[38;5;15;48;5;82mUNKNOWN LEVEL\033[0m "
 		}
 
-		// empty line to seperate lgo
-		fmt.Println()
-		funcName, file, line, ok := runtime.Caller(1)
+		// empty line to seperate log
+		// fmt.Println()
+		_, file, line, ok := runtime.Caller(1)
 		if !ok {
-			funcName = 0
+
 			file = ""
 			line = 0
 		}
 
 		fileName := path.Base(file)
-		shottFuncName := path.Base(runtime.FuncForPC(funcName).Name())
+		// shottFuncName := path.Base(runtime.FuncForPC(funcName).Name())
 
-		fmt.Printf("[%s] %s%s\t|| trace: %s:%d %s()\n", time.Now().Local().Format("2006-01-02 15:04:05 UTC-0700"), prefix, fmt.Sprint(args...), fileName, line, shottFuncName)
+		fmt.Printf("[%s] %s[%s:%d] %s \n", time.Now().Local().Format("2006-01-02 15:04:05 UTC-0700"), prefix, fileName, line, fmt.Sprint(args...))
 
 		// log.Printf("%s%s", prefix, fmt.Sprint(args...))
 
