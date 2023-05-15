@@ -1,4 +1,4 @@
-package logger
+package simulator
 
 import (
 	"fmt"
@@ -56,7 +56,7 @@ func (l *Logger) Log(level int, args ...interface{}) {
 		fileName := path.Base(file)
 		// shottFuncName := path.Base(runtime.FuncForPC(funcName).Name())
 
-		fmt.Printf("[%s] %s[%s:%d] %s \n", time.Now().Local().Format("2006-01-02 15:04:05 UTC-0700"), prefix, fileName, line, fmt.Sprint(args...))
+		fmt.Printf("[%s] %s[%s:%d] %s \n", time.Now().Local().Format("2006-01-02 15:04:05.000 UTC-0700"), prefix, fileName, line, fmt.Sprint(args...))
 
 		// log.Printf("%s%s", prefix, fmt.Sprint(args...))
 
@@ -65,7 +65,7 @@ func (l *Logger) Log(level int, args ...interface{}) {
 		prefix = re.ReplaceAllString(prefix, "")
 		argsStr := re.ReplaceAllString(fmt.Sprint(args...), "")
 
-		logTime := time.Now().Local().Format("2006-01-02 15:04:05 UTC-0700")
+		logTime := time.Now().Local().Format("2006-01-02 15:04:05.000 UTC-0700")
 
 		// write to log file
 		if l.File != nil {
