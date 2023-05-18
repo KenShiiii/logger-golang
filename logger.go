@@ -21,6 +21,18 @@ type Logger struct {
 	File *os.File
 }
 
+// Close closes the log file.
+func (l *Logger) Close() {
+	if l.File != nil {
+		l.File.Close()
+		l.File = nil
+	}
+}
+
+func NewLogger() *Logger {
+
+}
+
 // Log prints a log message with the given log level and message arguments.
 // If the log level is less than the logger's LogLevel, the message is not printed.
 func (l *Logger) Log(level int, args ...interface{}) {
@@ -71,13 +83,5 @@ func (l *Logger) Log(level int, args ...interface{}) {
 		if l.File != nil {
 			fmt.Fprintf(l.File, "\n%s %s%s", logTime, prefix, argsStr)
 		}
-	}
-}
-
-// Close closes the log file.
-func (l *Logger) Close() {
-	if l.File != nil {
-		l.File.Close()
-		l.File = nil
 	}
 }
