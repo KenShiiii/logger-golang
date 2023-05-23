@@ -1,4 +1,4 @@
-package gologger
+package splog
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func (l *Logger) Close() {
 }
 
 func NewLogger() *Logger {
-
+	return &Logger{}
 }
 
 // Log prints a log message with the given log level and message arguments.

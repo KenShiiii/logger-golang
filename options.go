@@ -1,4 +1,4 @@
-package gologger
+package splog
 
 import "os"
 
