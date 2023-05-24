@@ -34,7 +34,6 @@ const (
 	LevelInfo  uint = 1
 	LevelWarn  uint = 2
 	LevelErr   uint = 3
-	LevelFatal uint = 4
 )
 
 // Close closes the log file.
