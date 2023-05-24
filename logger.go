@@ -12,7 +12,7 @@ import (
 // Logger is the interface difinition for a simple logger as used by this library.
 type Logger interface {
 	Close()
-	Log(level int, args ...interface{})
+	Log(level int, args ...any)
 }
 
 type logger struct {
@@ -105,7 +105,7 @@ func (l *logger) Log(level int, args ...interface{}) {
 // The log message is formatted with the log time, prefix, file name, line number, and log message content.
 // If enabled, it prints the log message to stdout.
 // It also writes the log message to the log file, after removing ANSI escape characters.
-func (l *logger) writeLog(prefix string, args ...interface{}) {
+func (l *logger) writeLog(prefix string, args ...any) {
 	// Retrieve file name and line number of the caller
 	_, file, line, ok := runtime.Caller(2)
 	if !ok {
@@ -132,11 +132,52 @@ func (l *logger) writeLog(prefix string, args ...interface{}) {
 	}
 }
 
-func (l *logger) Debug(args ...interface{}) {
+// Debug logs messages with the "DEBU" prefix if the log level is set to debug.
+// The messages are written to the log file and, if enabled, printed to stdout.
+func (l *logger) Debug(args ...any) {
 	if l.logLevel > LevelDebug {
 		return
 	}
 	prefix := "\033[38;5;16;48;5;253mDEBU\033[0m "
 
 	l.writeLog(prefix, args...)
+}
+
+// Info logs messages with the "INFO" prefix if the log level is set to info or below.
+// The messages are written to the log file and, if enabled, printed to stdout.
+func (l *logger) Info(args ...any) {
+	if l.logLevel > LevelInfo {
+		return
+	}
+	prefix := "\033[48;5;57mINFO\033[0m "
+
+	l.writeLog(prefix, args...)
+}
+
+// Warn logs messages with the "WARN" prefix if the log level is set to warn or below.
+// The messages are written to the log file and, if enabled, printed to stdout.
+func (l *logger) Warn(args ...any) {
+	if l.logLevel > LevelWarn {
+		return
+	}
+	prefix := "\033[38;5;16;48;5;226mWARN\033[0m "
+
+	l.writeLog(prefix, args...)
+}
+
+// Error logs messages with the "ERRO" prefix.
+// The messages are written to the log file and, if enabled, printed to stdout.
+func (l *logger) Error(args ...any) {
+	prefix := "\033[38;5;15;48;5;160mERRO\033[0m "
+
+	l.writeLog(prefix, args...)
+}
+
+// Fatal logs messages with the "FATL" prefix and exits the program with a status of 1.
+// The messages are written to the log file and, if enabled, printed to stdout.
+func (l *logger) Fatal(args ...any) {
+	prefix := "\033[38;5;15;48;5;196;5mFATL\033[0m "
+
+	l.writeLog(prefix, args...)
+	os.Exit(1)
 }
