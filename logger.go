@@ -18,9 +18,9 @@ type Logger interface {
 type logger struct {
 	logLevel uint // LogLevel specifies the minimum log level required for a log message to be printed.
 
-	filePath string // FilePath specifies the path to the log file.
-
-	file *os.File // file is the file handle for the log file.
+	filePath string   // FilePath specifies the path to the log file.
+	file     *os.File // file is the file handle for the log file.
+	stdout   bool
 }
 
 const (
@@ -43,6 +43,7 @@ func NewLogger(o *loggerOptions) Logger {
 	l := &logger{
 		logLevel: o.logLevel,
 		file:     o.logFile,
+		stdout:   o.stdout,
 	}
 
 	return l
@@ -86,8 +87,6 @@ func (l *logger) Log(level int, args ...interface{}) {
 
 	fmt.Printf("[%s] %s[%s:%d] %s \n", logTime, prefix, fileName, line, fmt.Sprint(args...))
 
-	// log.Printf("%s%s", prefix, fmt.Sprint(args...))
-
 	// Replace escape characters with an empty string
 	re := regexp.MustCompile(`\033\[[0-9;]*[a-zA-Z]`)
 	prefix = re.ReplaceAllString(prefix, "")
@@ -117,6 +116,18 @@ func (l *logger) Debug(args ...interface{}) {
 	// shottFuncName := path.Base(runtime.FuncForPC(funcName).Name())
 	logTime := time.Now().Local().Format("2006-01-02 15:04:05.000 UTC-0700")
 
-	fmt.Printf("[%s] %s[%s:%d] %s \n", logTime, prefix, fileName, line, fmt.Sprint(args...))
+	if l.stdout {
+		fmt.Printf("[%s] %s[%s:%d] %s \n", logTime, prefix, fileName, line, fmt.Sprint(args...))
+	}
+
+	// Replace escape characters with an empty string
+	re := regexp.MustCompile(`\033\[[0-9;]*[a-zA-Z]`)
+	prefix = re.ReplaceAllString(prefix, "")
+	argsStr := re.ReplaceAllString(fmt.Sprint(args...), "")
+
+	// write to log file
+	if l.file != nil {
+		fmt.Fprintf(l.file, "[%s] %s[%s:%d] %s \n", logTime, prefix, fileName, line, argsStr)
+	}
 
 }
