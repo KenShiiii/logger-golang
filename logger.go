@@ -13,6 +13,12 @@ import (
 type Logger interface {
 	Close()
 	Log(level int, args ...any)
+
+	Debug(args ...any)
+	Info(args ...any)
+	Warn(args ...any)
+	Error(args ...any)
+	Fatal(args ...any)
 }
 
 type logger struct {
@@ -28,7 +34,6 @@ const (
 	LevelInfo  uint = 1
 	LevelWarn  uint = 2
 	LevelErr   uint = 3
-	LevelFatal uint = 4
 )
 
 // Close closes the log file.
