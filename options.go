@@ -24,19 +24,18 @@ func NewLoggerOptions() *loggerOptions {
 // The log level determines which log messages are recorded based on their severity.
 // The input lv should be an integer value representing the desired log level:
 //   - Values less than 0 will set the log level to Debug.
-//   - Values greater than 4 will set the log level to Fatal.
-//   - Values between 0 and 4 (inclusive) will set the log level accordingly.
+//   - Values greater than 3 will set the log level to Error.
+//   - Values between 0 and 3 (inclusive) will set the log level accordingly.
 //   - 0: Debug
 //   - 1: Info
 //   - 2: Warning
 //   - 3: Error
-//   - 4: Fatal
 func (l *loggerOptions) SetLogLevel(lv int) {
 	switch {
 	case lv < 0:
 		l.logLevel = LevelDebug
-	case lv > 4:
-		l.logLevel = LevelFatal
+	case lv > 3:
+		l.logLevel = LevelErr
 	default:
 		l.logLevel = uint(lv)
 	}
