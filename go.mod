@@ -1,3 +1,3 @@
-module github.com/KenshiKuo/splog
+module github.com/geminikenshi/splog
 
 go 1.20
